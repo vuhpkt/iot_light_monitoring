@@ -1,0 +1,38 @@
+<h2 class="mt-4">// Bộ lọc</h2>
+<table class="table mt-4">
+        <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Thiết bị</th>
+                <th scope="col">Địa điểm</th>
+                <th scope="col">Giá trị (lux)</th>
+                <th scope="col">Thời điểm đo</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{#each sensorData}}
+            <tr>
+                <th scope="row">{{this.id}}</th>
+                <td>Thiết bị 1</td>
+                <td>Phòng khách</td>
+                <td>{{this.value}}</td>
+                <td>{{this.measured_at}}</td>
+            </tr>
+            {{/each}}
+
+            {{!-- <tr>
+                <th scope="row">1</th>
+                <td>Thiết bị 1</td>
+                <td>Phòng khách</td>
+                <td>700</td>
+                <td>2026-03-17T05:27:29</td>
+            </tr>
+            <tr>
+                <th scope="row">1</th>
+                <td>Thiết bị 1</td>
+                <td>Phòng khách</td>
+                <td>800</td>
+                <td>2026-03-17T05:27:29</td>
+            </tr> --}}
+        </tbody>
+    </table>

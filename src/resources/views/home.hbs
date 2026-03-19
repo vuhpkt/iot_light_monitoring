@@ -1,0 +1,34 @@
+<div class="mt-4">
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">Thiết bị</th>
+                <th scope="col">Giá trị đo mới nhất (lux)</th>
+                <th scope="col">Thời điểm đo</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{#each devices}}
+            <tr id="{{this.id}}">
+                <th scope="row">{{this.name}}</th>
+                <td>{{this.latestValue}}</td>
+                <td>{{this.latestMeasurement}}</td>
+            </tr>
+            {{/each}}
+        </tbody>
+    </table>
+    <h2 class="mt-4">// Biểu đồ</h2>
+</div>
+
+<script>
+    const socket = io()
+    socket.on('send-sensor-data', data => {
+        console.log(data)
+        const tr = document.getElementById(data.device_id)
+        tr.innerHTML = `
+            <th scope="row">${tr.querySelector('th').innerText}</th>
+            <td>${data.value}</td>
+            <td>${new Date(data.measured_at).toString()}</td>
+        `
+    })
+</script>
