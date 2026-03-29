@@ -21,14 +21,14 @@
 </div>
 
 <script>
-    const socket = io()
-    socket.on('send-sensor-data', data => {
-        console.log(data)
+    const eventSource = new EventSource('/api/light-levels')
+    eventSource.onmessage = function(e) {
+        const data = JSON.parse(e.data)
         const tr = document.getElementById(data.device_id)
         tr.innerHTML = `
             <th scope="row">${tr.querySelector('th').innerText}</th>
             <td>${data.value}</td>
             <td>${new Date(data.measured_at).toString()}</td>
         `
-    })
+    }
 </script>

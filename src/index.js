@@ -1,6 +1,4 @@
 import express from 'express';
-import http from 'http'
-import { Server } from 'socket.io'
 import morgan from 'morgan';
 import { engine } from 'express-handlebars';
 import path from 'path';
@@ -14,8 +12,6 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const app = express()
-const server = http.createServer(app)
-const io = new Server(server)
 
 // Connect to DB
 db.testConnection()
@@ -48,16 +44,7 @@ app.use((err, req, res, next) => {
     });
 })
 
-io.on('connection', (socket) => {
-    console.log('a user connected');
-    socket.emit('hello', 'world');
-    socket.on('disconnect', () => {
-        console.log('user disconnected');
-    });
-});
-
-server.listen(port, () => {
+app.listen(port, () => {
     console.log(`App listening on port ${port}`)
 })
 
-export default io

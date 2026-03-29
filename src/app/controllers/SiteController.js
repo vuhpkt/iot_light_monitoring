@@ -3,21 +3,25 @@ import Device from "../models/Device.js"
 
 class SiteController {
     //[GET] /
-    async index (req, res, next) {
-        const devices = await Device.findAll()
-        await Promise.all(devices.map(async device => {
-            const { value, measured_at} = await SensorData.findLatest(device.id)
-            device.latestValue = value
-            device.latestMeasurement = measured_at
-        }))
-        res.render('home', { devices })
+    async index(req, res, next) {
+        try {
+            const devices = await Device.findAll()
+            await Promise.all(devices.map(async device => {
+                const { value, measured_at } = await SensorData.findLatest(device.id)
+                device.latestValue = value
+                device.latestMeasurement = measured_at
+            }))
+            res.render('home', { devices })
+        } catch(err) {
+            next(err)
+        }
     }
 
     //[GET] /devices
     async devices(req, res, next) {
         try {
             res.render('devices')
-        } catch(err) {
+        } catch (err) {
             next(err)
         }
     }
@@ -26,8 +30,8 @@ class SiteController {
     async history(req, res, next) {
         try {
             const sensorData = await SensorData.findAll()
-            res.render('history', {sensorData})
-        } catch(err) {
+            res.render('history', { sensorData })
+        } catch (err) {
             next(err)
         }
     }
