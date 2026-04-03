@@ -1,4 +1,4 @@
-import db from "../../config/db/index.js";
+import db from "../../services/db/index.js";
 
 async function findAll() {
     const sql = "SELECT * FROM devices"

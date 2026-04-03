@@ -1,4 +1,4 @@
-import db from '../../config/db/index.js'
+import db from '../../services/db/index.js'
 
 async function findByDeviceId(deviceId) {
     const sql = "SELECT * FROM sensor_data WHERE device_id = $1"

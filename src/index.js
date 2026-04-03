@@ -5,7 +5,8 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 
 import route from './routes/index.js'
-import db from './config/db/index.js'
+import db from './services/db/index.js'
+import mqttService from './services/mqtt/index.js'
 
 const port = 3000
 const __filename = fileURLToPath(import.meta.url);
@@ -15,6 +16,7 @@ const app = express()
 
 // Connect to DB
 db.testConnection()
+mqttService.connect()
 
 // Use static folder
 app.use(express.static(path.join(__dirname, 'public')))
