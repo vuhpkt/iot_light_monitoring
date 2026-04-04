@@ -1,4 +1,4 @@
-import express from 'express';
+import express, { NextFunction, Request, Response } from 'express';
 import morgan from 'morgan';
 import { engine } from 'express-handlebars';
 import path from 'path';
@@ -14,9 +14,13 @@ const __dirname = path.dirname(__filename);
 
 const app = express()
 
+interface AppError extends Error {
+    statusCode: number
+}
+
 // Connect to DB
 db.testConnection()
-mqttService.connect()
+// mqttService.connect()
 
 // Use static folder
 app.use(express.static(path.join(__dirname, 'public')))
@@ -34,7 +38,7 @@ app.set('views', path.join(__dirname, 'resources', 'views'))
 // Routes init
 route(app)
 
-app.use((err, req, res, next) => {
+app.use((err: AppError, req: Request, res: Response, next: NextFunction) => {
     console.error(`[SERVER]: ${err.message}`);
     console.error(err.stack);
 

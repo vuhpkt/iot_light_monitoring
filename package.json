@@ -18,20 +18,26 @@
   "type": "module",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon --inspect src/index.js",
+    "start": "nodemon --watch src --ext ts,js,hbs,json --exec tsx src/index.ts",
+    "build": "tsc",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
     "dotenv": "^17.3.1",
     "express": "^5.2.1",
     "express-handlebars": "^8.0.6",
-    "i": "^0.3.7",
     "mqtt": "^5.15.1",
-    "npm": "^11.11.1",
     "pg": "^8.20.0"
   },
   "devDependencies": {
+    "@types/express": "^5.0.6",
+    "@types/express-handlebars": "^5.3.1",
+    "@types/morgan": "^1.9.10",
+    "@types/node": "^25.5.2",
+    "@types/pg": "^8.20.0",
     "morgan": "^1.10.1",
-    "nodemon": "^3.1.14"
+    "nodemon": "^3.1.14",
+    "tsx": "^4.21.0",
+    "typescript": "^6.0.2"
   }
 }

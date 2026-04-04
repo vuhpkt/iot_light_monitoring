@@ -1,0 +1,30 @@
+{
+  "compilerOptions": {
+    /* 1. Môi trường Runtime */
+    "target": "ESNext",                          // Sử dụng cú pháp JS mới nhất (Node 20+ hỗ trợ cực tốt)
+    "module": "NodeNext",                        // Bắt buộc nếu bạn dùng "type": "module" trong package.json
+    "moduleResolution": "NodeNext",              // Giúp TS hiểu cách Node.js tìm kiếm các file .js/.ts
+
+    /* 2. Cấu trúc thư mục */
+    "rootDir": "src",                            // Nơi chứa mã nguồn TS của bạn
+    "outDir": "dist",                           // Nơi chứa mã JS sau khi biên dịch để chạy thực tế
+    "removeComments": true,                      // Xóa comment để file JS nhẹ hơn
+
+    /* 3. Kiểm tra lỗi nghiêm ngặt (Cực kỳ quan trọng cho IoT) */
+    "strict": true,                              // Bật tất cả các chế độ kiểm tra lỗi
+    "noImplicitAny": true,                       // Không cho phép biến không khai báo kiểu (tránh lỗi undefined)
+    "strictNullChecks": true,                    // Bắt buộc kiểm tra null/undefined (tránh crash server MQTT)
+    "alwaysStrict": true,                        // Luôn chạy ở chế độ "use strict"
+
+    /* 4. Khả năng tương thích */
+    "esModuleInterop": true,                    // Giúp import các thư viện CommonJS (như pg, morgan) dễ dàng
+    "skipLibCheck": true,                        // Bỏ qua kiểm tra kiểu trong node_modules để tăng tốc build
+    "forceConsistentCasingInFileNames": true,    // Tránh lỗi khi deploy lên Linux (Server)
+
+    /* 5. Tính năng bổ sung */
+    "resolveJsonModule": true,                   // Cho phép import file .json (như config hoặc package.json)
+    "sourceMap": true,                           // Giúp bạn debug trực tiếp trên code TS dù đang chạy file JS
+  },
+  "include": ["src/**/*"],                       // Chỉ biên dịch code trong thư mục src
+  "exclude": ["node_modules", "**/*.test.ts"]    // Loại bỏ các file không cần thiết
+}
