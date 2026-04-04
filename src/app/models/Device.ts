@@ -5,7 +5,7 @@ export interface IDevice {
     name: string,
     location: string,
     measurement_interval: number,
-    id: number,
+    id: string,
 }
 
 export interface IDeviceWithLatestData extends IDevice {

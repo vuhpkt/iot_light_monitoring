@@ -8,7 +8,7 @@ export interface ISensorData {
     measured_at: Date
 }
 
-function findByDeviceId(deviceId: number) {
+function findByDeviceId(deviceId: string) {
     const sql = "SELECT * FROM sensor_data WHERE device_id = $1"
     return db.query<ISensorData>(sql, [deviceId])
 }
@@ -18,12 +18,12 @@ function findAll() {
     return db.query<ISensorData>(sql)
 }
 
-function findLatest(deviceId: number) {
+function findLatest(deviceId: string) {
     const sql = "SELECT * FROM sensor_data WHERE device_id = $1 ORDER BY id DESC LIMIT 1"
     return db.query<ISensorData>(sql, [deviceId]).then(res => res[0])
 }
 
-function create(deviceId: number, value: number) {
+function create(deviceId: string, value: number) {
     const sql = "INSERT INTO sensor_data(device_id, value) VALUES ($1, $2) RETURNING *"
     return db.query<ISensorData>(sql, [deviceId, value]).then(res => res[0])
 }

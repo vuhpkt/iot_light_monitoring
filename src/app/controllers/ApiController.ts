@@ -2,7 +2,7 @@ import { Request, Response, NextFunction } from 'express'
 import SensorData from '../models/SensorData.js'
 import Device from '../models/Device.js'
 
-const clients: Array<Response> = []
+let clients: Array<Response> = []
 
 class ApiController {
 
@@ -23,20 +23,19 @@ class ApiController {
     createData(req: Request, res: Response, next: NextFunction) {
         const deviceId = req.body.device_id
         const value = req.body.value
-        SensorData.create(deviceId, value)
+        return SensorData.create(deviceId, value)
             .then(data => {
                 clients.forEach(client => {
                     client.write(`data: ${JSON.stringify(data)}\n\n`)
                 })
                 res.send('OK')
             })
-            .catch(err => next(err))
     }
 
     // [POST] /devices
     createDevice(req: Request, res: Response, next: NextFunction) {
         const { id, name, location, measurement_interval } = req.body
-        Device.create(id, name, location, measurement_interval)
+        return Device.create(id, name, location, measurement_interval)
             .then(data => {
                 res.send('OK')
                 console.log(data)
