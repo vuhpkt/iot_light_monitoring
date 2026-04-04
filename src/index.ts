@@ -8,7 +8,7 @@ import route from './routes/index.js'
 import db from './services/db/index.js'
 import mqttService from './services/mqtt/index.js'
 
-const port = 3000
+const port = process.env.PORT || 3000
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
