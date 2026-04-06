@@ -1,5 +1,5 @@
 import { QueryResultRow } from 'pg'
-import db from '../../services/db/index.js'
+import db from '../../configs/db/index.js'
 
 export interface ISensorData {
     id: number,

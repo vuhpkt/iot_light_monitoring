@@ -15,7 +15,7 @@ class ApiController {
         })
         clients.push(res)
         req.on('close', () => {
-            clients.filter(client => client !== res)
+            clients = clients.filter(client => client !== res)
         })
     }
 
