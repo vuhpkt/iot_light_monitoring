@@ -1,4 +1,3 @@
-import { QueryResultRow } from "pg";
 import db from "../../configs/db/index.js";
 
 export interface IDevice {
@@ -19,7 +18,7 @@ function findAll() {
 }
 
 function findAllWithLatestData() {
-    const sql = "SELECT d.*, sd.measured_at AS \"latestMeasurement\", sd.value AS \"latestValue\"" +
+    const sql = "SELECT d.*, sd.measured_at AS \"latestMeasurement\", sd.value AS \"latestValue\" " +
         "FROM devices d LEFT JOIN ( SELECT DISTINCT ON (device_id) device_id, value," +
         "measured_at, id FROM sensor_data ORDER BY device_id, id DESC) sd ON sd.device_id =  d.id"
     return db.query<IDeviceWithLatestData>(sql)

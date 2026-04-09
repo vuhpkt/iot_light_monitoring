@@ -1,4 +1,3 @@
-import { QueryResultRow } from 'pg'
 import db from '../../configs/db/index.js'
 
 export interface ISensorData {
