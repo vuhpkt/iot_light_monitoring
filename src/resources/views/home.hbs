@@ -17,18 +17,97 @@
             {{/each}}
         </tbody>
     </table>
-    <h2 class="mt-4">// Biểu đồ</h2>
+    <h2 class="mt-4">Biểu đồ cường độ ánh sáng</h2>
+    <canvas id="lightChart" width="400" height="150" class="mt-3"></canvas>
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
+    // Khởi tạo biểu đồ
+    const ctx = document.getElementById('lightChart').getContext('2d');
+    const lightChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: [],
+            datasets: []
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    title: { display: true, text: 'Cường độ (lux)' }
+                },
+                x: {
+                    title: { display: true, text: 'Thời gian' }
+                }
+            },
+            plugins: {
+                legend: { display: true }
+            }
+        }
+    });
+
+    // Mảng chứa các màu định sẵn để dễ nhìn thay vì trúng random quá sáng
+    const chartColors = [
+        'rgba(75, 192, 192, 1)',
+        'rgba(255, 99, 132, 1)',
+        'rgba(54, 162, 235, 1)',
+        'rgba(255, 206, 86, 1)',
+        'rgba(153, 102, 255, 1)',
+        'rgba(255, 159, 64, 1)'
+    ];
+
     const eventSource = new EventSource('/api/light-levels')
     eventSource.onmessage = function(e) {
         const data = JSON.parse(e.data)
         const tr = document.getElementById(data.device_id)
-        tr.innerHTML = `
-            <th scope="row">${tr.querySelector('th').innerText}</th>
-            <td>${data.value}</td>
-            <td>${new Date(data.measured_at).toString()}</td>
-        `
+        const deviceName = tr ? tr.querySelector('th').innerText : data.device_id;
+        
+        // Cập nhật bảng
+        if (tr) {
+            tr.innerHTML = `
+                <th scope="row">${deviceName}</th>
+                <td>${data.value}</td>
+                <td>${new Date(data.measured_at).toLocaleString()}</td>
+            `
+        }
+
+        // Thời gian để hiển thị trên biểu đồ
+        const timeLabel = new Date(data.measured_at).toLocaleTimeString();
+        lightChart.data.labels.push(timeLabel);
+
+        // Tìm hoặc tạo dataset cho thiết bị
+        let dataset = lightChart.data.datasets.find(ds => ds.label === deviceName);
+        if (!dataset) {
+            const colorIndex = lightChart.data.datasets.length % chartColors.length;
+            const color = chartColors[colorIndex];
+            dataset = {
+                label: deviceName,
+                data: new Array(lightChart.data.labels.length - 1).fill(null), // Điền null cho dữ liệu cũ để đồng bộ x-axis
+                borderColor: color,
+                backgroundColor: color,
+                borderWidth: 2,
+                tension: 0.4,
+                spanGaps: true // Cho phép liên kết qua các điểm bị thiếu (null)
+            };
+            lightChart.data.datasets.push(dataset);
+        }
+
+        // Cập nhật giá trị vào mảng dataset (thêm giá trị mới hoặc thêm null)
+        lightChart.data.datasets.forEach(ds => {
+            if (ds === dataset) {
+                ds.data.push(data.value);
+            } else {
+                ds.data.push(null);
+            }
+        });
+
+        // Giữ tối đa 20 điểm trên biểu đồ
+        if (lightChart.data.labels.length > 20) {
+            lightChart.data.labels.shift();
+            lightChart.data.datasets.forEach(ds => ds.data.shift());
+        }
+
+        lightChart.update();
     }
 </script>

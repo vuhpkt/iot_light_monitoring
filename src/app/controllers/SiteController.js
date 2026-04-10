@@ -3,39 +3,25 @@ import Device from "../models/Device.js"
 
 class SiteController {
     //[GET] /
-    async index(req, res, next) {
-        try {
-            const devices = await Device.findAll()
-            await Promise.all(devices.map(async device => {
-                const { value, measured_at } = await SensorData.findLatest(device.id)
-                device.latestValue = value
-                device.latestMeasurement = measured_at
-            }))
-            res.render('home', { devices })
-        } catch(err) {
-            next(err)
-        }
+    index(req, res, next) {
+        return Device.findAllWithLatestData()
+            .then(devices => {
+                res.render('home', { devices })
+            })
     }
 
     //[GET] /devices
-    async devices(req, res, next) {
-        try {
-            res.render('devices')
-        } catch (err) {
-            next(err)
-        }
+    devices(req, res, next) {
+        res.render('devices')
     }
 
     //[GET] /history
-    async history(req, res, next) {
-        try {
-            const sensorData = await SensorData.findAll()
-            res.render('history', { sensorData })
-        } catch (err) {
-            next(err)
-        }
+    history(req, res, next) {
+        return SensorData.findAll()
+            .then(sensorData => {
+                res.render('history', { sensorData })
+            })
     }
-
 }
 
 export default new SiteController

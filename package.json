@@ -16,18 +16,17 @@
   "license": "ISC",
   "author": "Vu Hoang",
   "type": "module",
-  "main": "index.js",
+  "main": "src/index.js",
   "scripts": {
-    "start": "nodemon --inspect src/index.js",
+    "start": "nodemon --watch src --ext js,hbs,json src/index.js",
+    "start:deploy": "node src/index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
     "dotenv": "^17.3.1",
     "express": "^5.2.1",
     "express-handlebars": "^8.0.6",
-    "i": "^0.3.7",
     "mqtt": "^5.15.1",
-    "npm": "^11.11.1",
     "pg": "^8.20.0"
   },
   "devDependencies": {

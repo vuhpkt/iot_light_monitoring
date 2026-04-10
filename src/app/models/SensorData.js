@@ -1,27 +1,23 @@
-import db from '../../services/db/index.js'
+import db from '../../configs/db/index.js'
 
-async function findByDeviceId(deviceId) {
+function findByDeviceId(deviceId) {
     const sql = "SELECT * FROM sensor_data WHERE device_id = $1"
-    const res = await db.query(sql, deviceId)
-    return res
+    return db.query(sql, [deviceId])
 }
 
-async function findAll() {
+function findAll() {
     const sql = "SELECT * FROM sensor_data"
-    const res = await db.query(sql)
-    return res
+    return db.query(sql)
 }
 
-async function findLatest(deviceId) {
+function findLatest(deviceId) {
     const sql = "SELECT * FROM sensor_data WHERE device_id = $1 ORDER BY id DESC LIMIT 1"
-    const res = await db.query(sql, [deviceId])
-    return res[0]
+    return db.query(sql, [deviceId]).then(res => res[0])
 }
 
-async function create(deviceId, value) {
+function create(deviceId, value) {
     const sql = "INSERT INTO sensor_data(device_id, value) VALUES ($1, $2) RETURNING *"
-    const res = await db.query(sql, [deviceId, value])    
-    return res[0]
+    return db.query(sql, [deviceId, value]).then(res => res[0])
 }
 
 export default { findByDeviceId, findAll, findLatest, create }
